@@ -1,18 +1,18 @@
-# A4word
+# Portfolio
 
-To start your Phoenix server:
+## Writing
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+The publications articles are located in
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+```
+../writing/publications
+```
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Re-generate
 
-## Learn more
+To regenerate run
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+```bash
+mix run --eval "A4word.Generator.run()" && \
+  mix format
+```

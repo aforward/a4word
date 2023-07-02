@@ -18,6 +18,7 @@ defmodule A4wordWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/publications", PublicationsController, :index
   end
 
   # Other scopes may use custom stacks.
