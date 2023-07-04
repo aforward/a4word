@@ -3,6 +3,7 @@ defmodule A4word.Generator do
 
   def run(dir \\ @writing_dir) do
     publish_publications("#{dir}/publications")
+    publish_talks("#{dir}/talks")
     :ok
   end
 
@@ -23,7 +24,71 @@ defmodule A4word.Generator do
     File.write("./lib/gen/publications.ex", gen)
   end
 
+  def publish_talks(dir) do
+    talks = talks(dir)
+
+    gen = """
+    defmodule Gen.Talks do
+      def all() do
+        [
+          #{talks |> Enum.map(&"#{inspect(&1)},") |> Enum.join("\n")}
+        ]
+        |> Enum.map(&to_html/1)
+      end
+
+      defp to_html(talk) do
+        talk
+        |> Enum.map(fn
+          {:pitch, markdown} -> {:pitch, A4word.Markdown.to_html(markdown)}
+          {:summary, markdown} -> {:summary, A4word.Markdown.to_html(markdown)}
+          {k, v} -> {k, v}
+        end)
+        |> Enum.into(%{})
+      end
+    end
+    """
+
+    File.write("./lib/gen/talks.ex", gen)
+  end
+
   def publications(dir) do
+    filenames =
+      dir
+      |> File.ls!()
+      |> Enum.filter(&String.ends_with?(&1, ".md"))
+      |> Enum.map(&"#{dir}/#{&1}")
+
+    filenames
+    |> Enum.map(fn filename ->
+      filename
+      |> File.stream!()
+      |> Enum.reduce({nil, step: :title}, fn
+        line, {_, step: :title} ->
+          {%{title: clean(line)}, step: :conference}
+
+        line, {pub, step: :conference} ->
+          [conference, year] = String.split(clean(line), " - ", parts: 2)
+
+          pub
+          |> Map.put(:conference, conference)
+          |> Map.put(:year, year)
+          |> then(&{&1, step: :skip})
+
+        line, {pub, step: section} ->
+          analyze_section(pub, line, section)
+      end)
+      |> then(fn {pub, step: section} -> clean_section(pub, section) end)
+    end)
+    |> Enum.sort(fn a, b ->
+      cond do
+        a.year > b.year -> true
+        a.year == b.year and a.title < b.title -> true
+        :else -> false
+      end
+    end)
+  end
+
+  def talks(dir) do
     filenames =
       dir
       |> File.ls!()

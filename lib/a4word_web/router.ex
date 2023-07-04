@@ -19,6 +19,7 @@ defmodule A4wordWeb.Router do
 
     get "/", PageController, :home
     get "/publications", PublicationsController, :index
+    get "/talks", TalksController, :index
   end
 
   # Other scopes may use custom stacks.
