@@ -2,9 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* This file is for your main application CSS */
-
-
+/* TALKS */
 .talk-section a {
   @apply underline text-sky-500;
 }
@@ -17,6 +15,11 @@
   @apply mt-2 text-base text-zinc-700 dark:text-zinc-400
 }
 
-.talk-section .pitch p {
+.talk-section .pitch p, .talk-section .pitch li {
   @apply mt-2 text-sm text-zinc-400 dark:text-zinc-400
 }
+
+.talk-section ul {
+  @apply list-disc list-inside
+}
+
