@@ -23,3 +23,17 @@
   @apply list-disc list-inside
 }
 
+
+/* BOOKS */
+.bookpost {
+  max-height: 300px;
+  @apply overflow-auto;
+}
+
+.bookpost ul {
+  @apply ml-3 list-disc list-inside;
+}
+
+.bookpost p {
+  @apply mt-3 mb-2 leading-6;
+}
