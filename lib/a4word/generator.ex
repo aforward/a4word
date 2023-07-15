@@ -4,6 +4,7 @@ defmodule A4word.Generator do
   def run(dir \\ @writing_dir) do
     publish_publications("#{dir}/publications")
     publish_talks("#{dir}/talks")
+    publish_books("#{dir}/books")
     :ok
   end
 
@@ -49,6 +50,35 @@ defmodule A4word.Generator do
     """
 
     File.write("./lib/gen/talks.ex", gen)
+  end
+
+  def publish_books(dir) do
+    File.rm_rf("./priv/static/images/book-covers")
+    File.cp_r("#{dir}/covers", "./priv/static/images/book-covers")
+
+    books = books(dir)
+
+    gen = """
+    defmodule Gen.Books do
+      def all() do
+        [
+          #{books |> Enum.map(&"#{inspect(&1)},") |> Enum.join("\n")}
+        ]
+        |> Enum.map(&to_html/1)
+      end
+
+      defp to_html(book) do
+        book
+        |> Enum.map(fn
+          {:summary, markdown} -> {:summary, A4word.Markdown.to_html(markdown)}
+          {k, v} -> {k, v}
+        end)
+        |> Enum.into(%{})
+      end
+    end
+    """
+
+    File.write("./lib/gen/books.ex", gen)
   end
 
   def publications(dir) do
@@ -123,6 +153,62 @@ defmodule A4word.Generator do
         :else -> false
       end
     end)
+  end
+
+  def books(dir) do
+    filenames =
+      dir
+      |> File.ls!()
+      |> Enum.filter(&String.ends_with?(&1, ".md"))
+      |> Enum.map(&"#{dir}/#{&1}")
+
+    filenames
+    |> Enum.map(fn filename ->
+      filename
+      |> File.stream!()
+      |> Enum.reduce({nil, step: :title}, fn
+        line, {_, step: :title} ->
+          {%{title: clean(line)}, step: :author}
+
+        line, {pub, step: :author} ->
+          {Map.put(pub, :author, clean(line)), step: :meta}
+
+        line, {pub, step: :meta} ->
+          case analyze_meta(line) do
+            {k, v} -> {Map.put(pub, k, v), step: :meta}
+            :next -> {Map.put(pub, :summary, line), step: :img}
+          end
+
+        line, {pub, step: :img} ->
+          if String.starts_with?(line, "![") do
+            {Map.put(pub, :img, clean(line)), step: :summary}
+          else
+            {pub, step: :img}
+          end
+
+        line, {pub, step: :summary} ->
+          {append_section(pub, line, :summary), step: :summary}
+
+        line, {pub, step: section} ->
+          IO.inspect("Ignoring #{line}")
+          {pub, step: section}
+      end)
+      |> then(fn {pub, step: section} -> clean_section(pub, section) end)
+      |> then(&Map.put(&1, :slug, Path.basename(filename, ".md")))
+    end)
+    |> Enum.sort_by(& &1.datetime, :desc)
+  end
+
+  defp analyze_meta(line) do
+    if String.starts_with?(line, "#meta") do
+      line
+      |> String.replace(~r{^#meta}, "")
+      |> String.trim()
+      |> String.split(" ", parts: 2)
+      |> then(fn [k, v] -> {String.to_atom(k), v} end)
+    else
+      :next
+    end
   end
 
   defp analyze_section(pub, line, section) do
