@@ -1,0 +1,92 @@
+<header class="max-w-6xl">
+  <h1 class="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-3xl">
+    Dr. Andrew Forward
+  </h1>
+  <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
+    aforward@hey.com<br /> 613-795-5273<br /> Remote or Ottawa, Canada (UTC-05:00)<br />
+  </p>
+</header>
+<main class="mt-4 pb-8">
+  <div class="mx-auto">
+    <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
+      <!-- Left column -->
+      <div class="grid grid-cols-1 gap-4 lg:col-span-2">
+        <section>
+          <div class="overflow-hidden rounded-lg bg-white">
+            <div class="p-6">
+              <h2 class="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
+                Experience
+              </h2>
+              <%= for p <- @jobs do %>
+                <article class="md:grid md:grid-cols-4 md:items-baseline mb-4">
+                  <div class="md:col-span-3 flex flex-col items-start">
+                    <h3 class="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
+                      <span class="z-10"><%= p.role %></span>
+                    </h3>
+                    <h4 class="text-base tracking-tight text-zinc-800 dark:text-zinc-100">
+                      <span class="z-10"><%= p.company %></span>
+                    </h4>
+
+                    <p class="mt-2 text-sm text-zinc-700 dark:text-zinc-400">
+                      <%= p.abstract %>
+                    </p>
+
+                    <%= if p[:url] do %>
+                      <a
+                        class="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500 hover:underline cursor-pointer"
+                        href={p.url}
+                      >
+                        Read article<svg
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          aria-hidden="true"
+                          class="ml-1 h-4 w-4 stroke-current"
+                        ><path
+                            d="M6.75 5.75 9.25 8l-2.5 2.25"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path></svg>
+                      </a>
+                    <% end %>
+                  </div>
+                  <time
+                    class="mt-1 md:block relative z-10 order-first mb-3 pr-4 flex items-center text-sm text-zinc-400 dark:text-zinc-500"
+                    datetime={p.started}
+                  ><%= p.started %> - <%= p.ended %></time>
+                </article>
+              <% end %>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- Right column -->
+      <div class="grid grid-cols-1 gap-4">
+        <section>
+          <div class="overflow-hidden rounded-lg bg-white">
+            <div class="p-6">
+
+              <h2 class="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
+                Consultant roles
+              </h2>
+
+              <%= for p <- @consultants do %>
+                <article class="mb-4">
+                  <h4 class="text-base font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
+                    <span class="z-10"><%= p.company %> <%= p.year %></span>
+                  </h4>
+                  <p class="text-sm text-zinc-700 dark:text-zinc-400">
+                    <%= p.summary %>
+                  </p>
+                </article>
+              <% end %>
+
+
+
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
