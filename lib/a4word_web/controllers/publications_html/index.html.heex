@@ -1,4 +1,4 @@
-<header class="max-w-2xl">
+<header class="max-w-6xl">
   <h1 class="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
     Academic writing on software modeling, documentation and quality assurance.
   </h1>
@@ -9,15 +9,12 @@
 <main>
   <.flash_group flash={@flash} />
   <div class="my-16 sm:mt-20">
-    <div class="flex max-w-3xl flex-col space-y-16">
+    <div class="flex max-w-6xl flex-col space-y-16">
       <%= for p <- @publications do %>
         <article class="md:grid md:grid-cols-4 md:items-baseline">
           <div class="md:col-span-3 flex flex-col items-start">
             <h2 class="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
-              <div class="absolute -inset-x-4 -inset-y-6 z-0 scale-95 bg-zinc-50 opacity-0 transition dark:bg-zinc-800/50 sm:-inset-x-6 sm:rounded-2xl">
-              </div>
-              <span class="absolute -inset-x-4 -inset-y-6 z-20 sm:-inset-x-6 sm:rounded-2xl">
-              </span><span class="z-10"><%= p.title %></span>
+              <span class="z-10"><%= p.title %></span>
             </h2>
             <p class="mt-2 text-sm text-zinc-700 dark:text-zinc-400">
               <%= p.abstract %>
@@ -46,7 +43,7 @@
             <% end %>
           </div>
           <time
-            class="mt-1 xhidden md:block relative z-10 order-first mb-3 flex items-center text-sm text-zinc-400 dark:text-zinc-500"
+            class="mt-1 md:block relative z-10 order-first mb-3 pr-4 flex items-center text-sm text-zinc-400 dark:text-zinc-500"
             datetime={p.year}
           >
             <%= p.conference %> <%= p.year %>
