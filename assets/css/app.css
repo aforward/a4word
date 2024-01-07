@@ -2,6 +2,17 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* HOME */
+a.external, a.internal {
+  @apply underline text-sky-500;
+}
+
+.highlight {
+  @apply text-teal-600;
+}
+
+
+
 /* TALKS */
 .talk-section a {
   @apply underline text-sky-500;
