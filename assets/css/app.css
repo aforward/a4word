@@ -26,8 +26,7 @@
 
 /* BOOKS */
 .bookpost {
-  max-height: 300px;
-  @apply overflow-auto;
+  @apply overflow-auto lg:max-h-56;
 }
 
 .bookpost ul {
