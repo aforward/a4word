@@ -153,12 +153,12 @@ defmodule A4wordWeb.Spotlight do
 
   def footer(assigns) do
     ~H"""
-    <footer class="mt-32">
+    <footer class="mt-10">
       <div class="sm:px-8">
         <div class="mx-auto max-w-7xl lg:px-8">
           <div class="border-t border-zinc-100 pt-10 pb-16 dark:border-zinc-700/40">
             <div class="relative px-4 sm:px-8 lg:px-12">
-              <div class="mx-auto max-w-2xl lg:max-w-5xl">
+              <div class="mx-auto">
                 <div class="grid justify-items-center grid-cols-1">
                   <div class="flex gap-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
                     <svg
@@ -213,7 +213,14 @@ defmodule A4wordWeb.Spotlight do
                     </a>
                   </div>
                   <div class="mx-auto">
-                    <%= for {title, href} <- [{"Books", "/books"}, {"Demos", "/demos"}, {"Snippets", "/snippets"}, {"Blog", "/blog"}] do %>
+                    <%= for {title, href} <- [
+                        {"About", "/resume"},
+                        {"Talks", "/talks"},
+                        {"Publications", "/publications"},
+                        {"Books", "/books"},
+                        {"Demos", "/demos"},
+                        {"Blog", "/blog"}
+                      ] do %>
                       <a
                         class="px-2 text-gray-500 hover:text-gray-800 hover:underline"
                         style="line-height: 32px"
