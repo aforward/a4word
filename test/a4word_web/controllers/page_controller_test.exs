@@ -3,6 +3,6 @@ defmodule A4wordWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "a4word"
+    assert html_response(conn, 200) =~ "Andrew"
   end
 end
