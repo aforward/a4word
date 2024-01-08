@@ -18,10 +18,18 @@ defmodule A4wordWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    get "/publications", PublicationsController, :index
-    get "/talks", TalksController, :index
-    get "/books", BooksController, :index
+    get "/publications", PageController, :publications
+    get "/talks", PageController, :talks
+    get "/books", PageController, :books
     get "/resume", PageController, :resume
+    get "/blog", PageController, :blog
+    get "/snippets", PageController, :snippets
+
+    get "/demos", PageController, :demos
+    get "/demo", PageController, :demos
+    live "/demo/empex", EmpexlogoLive
+    live "/demo/hanoi", HanoiLive
+    live "/demo/hangman", HangmanLive
   end
 
   # Other scopes may use custom stacks.

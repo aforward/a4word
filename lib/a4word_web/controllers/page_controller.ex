@@ -2,7 +2,31 @@ defmodule A4wordWeb.PageController do
   use A4wordWeb, :controller
 
   def home(conn, _params) do
-    render(conn, :home, layout: false)
+    render(conn, :home)
+  end
+
+  def demos(conn, _params), do: render(conn, :demos)
+
+  def blog(conn, _params), do: redirect(conn, external: "https://anunknown.dev")
+
+  def snippets(conn, _params), do: redirect(conn, external: "https://anunknown.dev/snippets")
+
+  def talks(conn, _params) do
+    conn
+    |> assign(:talks, Gen.Talks.all())
+    |> render(:talks)
+  end
+
+  def books(conn, _params) do
+    conn
+    |> assign(:books, Gen.Books.all())
+    |> render(:books)
+  end
+
+  def publications(conn, _params) do
+    conn
+    |> assign(:publications, Gen.Publications.all())
+    |> render(:publications)
   end
 
   def resume(conn, _params) do

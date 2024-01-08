@@ -1,135 +1,137 @@
-<header class="max-w-6xl">
-  <h1 class="text-2xl font-bold tracking-tight text-zinc-600 dark:text-zinc-100 sm:text-3xl">
-    Dr. Andrew Forward
-  </h1>
-  <p class="mt-4 text-lg text-zinc-400 dark:text-zinc-400">
-    Test-driven development, infrastructure as code, manage, design, development, automate and continuous everything.
-    Reach me at <a href="mailto:aforward@hey.com" class="internal">aforward@hey.com</a>
-    (yes, I pay for email).
-  </p>
-</header>
-<main class="mt-4 pb-8">
-  <div class="mx-auto">
-    <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
-      <!-- Left column -->
-      <div class="grid grid-cols-1 gap-4 lg:col-span-2">
-        <section>
-          <div class="overflow-hidden rounded-lg bg-white">
-            <div class="py-6">
-              <h2 class="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
-                Experience
-              </h2>
-              <%= for p <- @jobs do %>
-                <article class="md:grid md:grid-cols-4 md:items-baseline mb-4">
-                  <div class="md:col-span-3 flex flex-col items-start">
-                    <h3 class="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
-                      <span class="z-10"><%= p.role %></span>
-                    </h3>
-                    <h4 class="text-base tracking-tight text-zinc-800 dark:text-zinc-100">
-                      <span class="z-10"><%= p.company %></span>
+<Webby.body>
+  <header class="max-w-6xl">
+    <h1 class="text-2xl font-bold tracking-tight text-zinc-600 dark:text-zinc-100 sm:text-3xl">
+      Dr. Andrew Forward
+    </h1>
+    <p class="mt-4 text-lg text-zinc-400 dark:text-zinc-400">
+      Test-driven development, infrastructure as code, manage, design, development, automate and continuous everything.
+      Reach me at <a href="mailto:aforward@hey.com" class="internal">aforward@hey.com</a>
+      (yes, I pay for email).
+    </p>
+  </header>
+  <main class="mt-4 pb-8">
+    <div class="mx-auto">
+      <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
+        <!-- Left column -->
+        <div class="grid grid-cols-1 gap-4 lg:col-span-2">
+          <section>
+            <div class="overflow-hidden rounded-lg bg-white">
+              <div class="py-6">
+                <h2 class="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
+                  Experience
+                </h2>
+                <%= for p <- @jobs do %>
+                  <article class="md:grid md:grid-cols-4 md:items-baseline mb-4">
+                    <div class="md:col-span-3 flex flex-col items-start">
+                      <h3 class="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
+                        <span class="z-10"><%= p.role %></span>
+                      </h3>
+                      <h4 class="text-base tracking-tight text-zinc-800 dark:text-zinc-100">
+                        <span class="z-10"><%= p.company %></span>
+                      </h4>
+
+                      <p class="mt-2 text-sm text-zinc-700 dark:text-zinc-400">
+                        <%= p.abstract %>
+                      </p>
+
+                      <%= if p[:url] do %>
+                        <a
+                          class="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500 hover:underline cursor-pointer"
+                          href={p.url}
+                        >
+                          Read article<svg
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            aria-hidden="true"
+                            class="ml-1 h-4 w-4 stroke-current"
+                          ><path
+                              d="M6.75 5.75 9.25 8l-2.5 2.25"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            ></path></svg>
+                        </a>
+                      <% end %>
+                    </div>
+                    <time
+                      class="mt-1 md:block relative z-10 order-first mb-3 pr-4 flex items-center text-sm text-zinc-400 dark:text-zinc-500"
+                      datetime={p.started}
+                    >
+                      <%= p.started %> - <%= p.ended %>
+                    </time>
+                  </article>
+                <% end %>
+
+                <h2 class="mt-10 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
+                  Education <span class="text-sm font-normal text-zinc-400 dark:text-zinc-500 ml-4">1982 - present</span>
+                </h2>
+
+                <%= for p <- @educations do %>
+                  <p class="mt-4">
+                    <span class="font-bold text-zinc-800"><%= p.title %></span>
+                    <span class="text-zinc-400"><%= if p[:year], do: " (#{p[:year]}) ", else: ""%>- <%= p.summary %></span>
+                  </p>
+                <% end %>
+
+                <h2 class="mt-10 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
+                  Skills
+                </h2>
+
+                <%= for p <- @skills do %>
+                  <article class="mb-4">
+                    <h4 class="text-base font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
+                      <span class="z-10"><%= p.name %></span>
                     </h4>
-
-                    <p class="mt-2 text-sm text-zinc-700 dark:text-zinc-400">
-                      <%= p.abstract %>
+                    <p class="text-sm text-zinc-400 dark:text-zinc-400">
+                      <%= p.summary %>
                     </p>
+                  </article>
+                <% end %>
 
-                    <%= if p[:url] do %>
-                      <a
-                        class="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500 hover:underline cursor-pointer"
-                        href={p.url}
-                      >
-                        Read article<svg
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          aria-hidden="true"
-                          class="ml-1 h-4 w-4 stroke-current"
-                        ><path
-                            d="M6.75 5.75 9.25 8l-2.5 2.25"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          ></path></svg>
-                      </a>
-                    <% end %>
-                  </div>
-                  <time
-                    class="mt-1 md:block relative z-10 order-first mb-3 pr-4 flex items-center text-sm text-zinc-400 dark:text-zinc-500"
-                    datetime={p.started}
-                  >
-                    <%= p.started %> - <%= p.ended %>
-                  </time>
-                </article>
-              <% end %>
-
-              <h2 class="mt-10 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
-                Education <span class="text-sm font-normal text-zinc-400 dark:text-zinc-500 ml-4">1982 - present</span>
-              </h2>
-
-              <%= for p <- @educations do %>
-                <p class="mt-4">
-                  <span class="font-bold text-zinc-800"><%= p.title %></span>
-                  <span class="text-zinc-400"><%= if p[:year], do: " (#{p[:year]}) ", else: ""%>- <%= p.summary %></span>
-                </p>
-              <% end %>
-
-              <h2 class="mt-10 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
-                Skills
-              </h2>
-
-              <%= for p <- @skills do %>
-                <article class="mb-4">
-                  <h4 class="text-base font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
-                    <span class="z-10"><%= p.name %></span>
-                  </h4>
-                  <p class="text-sm text-zinc-400 dark:text-zinc-400">
-                    <%= p.summary %>
-                  </p>
-                </article>
-              <% end %>
-
+              </div>
             </div>
-          </div>
-        </section>
-      </div>
-      <!-- Right column -->
-      <div class="grid grid-cols-1 gap-4 lg:border-l-2 xborder-2 lg:border-slate-200 h-full">
-        <section>
-          <div class="overflow-hidden rounded-lg bg-white">
-            <div class="py-6 lg:pl-10">
-              <h2 class="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
-                Consultant roles
-              </h2>
+          </section>
+        </div>
+        <!-- Right column -->
+        <div class="grid grid-cols-1 gap-4 lg:border-l-2 xborder-2 lg:border-slate-200 h-full">
+          <section>
+            <div class="overflow-hidden rounded-lg bg-white">
+              <div class="py-6 lg:pl-10">
+                <h2 class="text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
+                  Consultant roles
+                </h2>
 
-              <%= for p <- @consultants do %>
-                <article class="mb-4">
-                  <h4 class="text-base font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
-                    <span class="z-10"><%= p.company %> <%= p.year %></span>
-                  </h4>
-                  <p class="text-sm text-zinc-400 dark:text-zinc-400">
-                    <%= p.summary %>
-                  </p>
-                </article>
-              <% end %>
+                <%= for p <- @consultants do %>
+                  <article class="mb-4">
+                    <h4 class="text-base font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
+                      <span class="z-10"><%= p.company %> <%= p.year %></span>
+                    </h4>
+                    <p class="text-sm text-zinc-400 dark:text-zinc-400">
+                      <%= p.summary %>
+                    </p>
+                  </article>
+                <% end %>
 
-              <h2 class="mt-10 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
-                Technologies
-              </h2>
+                <h2 class="mt-10 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
+                  Technologies
+                </h2>
 
-              <%= for p <- @technologies do %>
-                <article class="mb-4">
-                  <h4 class="text-base font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
-                    <span class="z-10"><%= p.name %></span>
-                  </h4>
-                  <p class="text-sm text-zinc-400 dark:text-zinc-400">
-                    <%= p.summary %>
-                  </p>
-                </article>
-              <% end %>
+                <%= for p <- @technologies do %>
+                  <article class="mb-4">
+                    <h4 class="text-base font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
+                      <span class="z-10"><%= p.name %></span>
+                    </h4>
+                    <p class="text-sm text-zinc-400 dark:text-zinc-400">
+                      <%= p.summary %>
+                    </p>
+                  </article>
+                <% end %>
 
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </div>
-  </div>
-</main>
+  </main>
+</Webby.body>
