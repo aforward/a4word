@@ -1,5 +1,5 @@
 <header class="max-w-6xl">
-  <h1 class="text-2xl font-bold tracking-tight text-purple-600 dark:text-zinc-100 sm:text-3xl">
+  <h1 class="text-2xl font-bold tracking-tight text-zinc-600 dark:text-zinc-100 sm:text-3xl">
     Dr. Andrew Forward
   </h1>
   <p class="mt-4 text-lg text-zinc-400 dark:text-zinc-400">
@@ -60,12 +60,39 @@
                   </time>
                 </article>
               <% end %>
+
+              <h2 class="mt-10 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
+                Education <span class="text-sm font-normal text-zinc-400 dark:text-zinc-500 ml-4">1982 - present</span>
+              </h2>
+
+              <%= for p <- @educations do %>
+                <p class="mt-4">
+                  <span class="font-bold text-zinc-800"><%= p.title %></span>
+                  <span class="text-zinc-400"><%= if p[:year], do: " (#{p[:year]}) ", else: ""%>- <%= p.summary %></span>
+                </p>
+              <% end %>
+
+              <h2 class="mt-10 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
+                Skills
+              </h2>
+
+              <%= for p <- @skills do %>
+                <article class="mb-4">
+                  <h4 class="text-base font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
+                    <span class="z-10"><%= p.name %></span>
+                  </h4>
+                  <p class="text-sm text-zinc-400 dark:text-zinc-400">
+                    <%= p.summary %>
+                  </p>
+                </article>
+              <% end %>
+
             </div>
           </div>
         </section>
       </div>
       <!-- Right column -->
-      <div class="grid grid-cols-1 gap-4 lg:border-l-2 xborder-2 lg:border-slate-200">
+      <div class="grid grid-cols-1 gap-4 lg:border-l-2 xborder-2 lg:border-slate-200 h-full">
         <section>
           <div class="overflow-hidden rounded-lg bg-white">
             <div class="py-6 lg:pl-10">
@@ -78,11 +105,27 @@
                   <h4 class="text-base font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
                     <span class="z-10"><%= p.company %> <%= p.year %></span>
                   </h4>
-                  <p class="text-sm text-zinc-700 dark:text-zinc-400">
+                  <p class="text-sm text-zinc-400 dark:text-zinc-400">
                     <%= p.summary %>
                   </p>
                 </article>
               <% end %>
+
+              <h2 class="mt-10 text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 mb-4">
+                Technologies
+              </h2>
+
+              <%= for p <- @technologies do %>
+                <article class="mb-4">
+                  <h4 class="text-base font-bold tracking-tight text-zinc-800 dark:text-zinc-100">
+                    <span class="z-10"><%= p.name %></span>
+                  </h4>
+                  <p class="text-sm text-zinc-400 dark:text-zinc-400">
+                    <%= p.summary %>
+                  </p>
+                </article>
+              <% end %>
+
             </div>
           </div>
         </section>
