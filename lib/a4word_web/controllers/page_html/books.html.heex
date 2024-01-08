@@ -1,18 +1,9 @@
 <Webby.body>
-  <header class="max-w-2xl">
-    <h1 class="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
-      Books Over Blogs.  Higher barrier to entry helps make for more effective
-      learnings.
-    </h1>
-    <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-      Read a thousand books in a life-time, with only 10 pages per day.
-      A collection of books to read, have been read, and might re-read.
-    </p>
-  </header>
+  <Spotlight.header mode="books" />
   <main>
     <.flash_group flash={@flash} />
-    <div class="my-16 sm:mt-20">
-      <div class="flex max-w-3xl flex-col space-y-16">
+    <div class="mb-16">
+      <div class="flex flex-col space-y-16">
         <div class="mt-12 grid gap-5 mx-auto lg:grid-cols-3">
           <%= for details <- @books do %>
             <div class="flex flex-col rounded-lg shadow-lg overflow-hidden">

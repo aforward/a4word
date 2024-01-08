@@ -99,7 +99,7 @@ defmodule A4wordWeb.Spotlight do
 
   def header(assigns) do
     ~H"""
-    <header class="max-w-2xl">
+    <header>
       <h1 class="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
         <img
           alt="This is a picture of me, Andrew Forward"
@@ -116,10 +116,19 @@ defmodule A4wordWeb.Spotlight do
               Technical <span class="text-blue-500">Tidbits</span>
             <% "demos" -> %>
               Technical <span class="text-blue-500">Demos</span>
+            <% "talks" -> %>
+              Yo Gabba Gabba
+              <a href="https://en.wikipedia.org/wiki/Yo_Gabba_Gabba!" class="text-sm text-zinc-300">
+                ref
+              </a>
+            <% "books" -> %>
+              Books Over Blogs
+            <% "publications" -> %>
+              Academic writing on software
           <% end %>
         </span>
       </h1>
-      <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
+      <p class="mt-6 text-2xl text-zinc-600 dark:text-zinc-400">
         <%= case assigns.mode do %>
           <% "home" -> %>
             Test-driven development, infrastructure as code, manage, design, development, automate and continuous everything.
@@ -128,6 +137,14 @@ defmodule A4wordWeb.Spotlight do
             A collection of code snippets of sometimes rarely used, or perhaps difficult to remember tasks, commands and code snippets.
           <% "demos" -> %>
             A collection of demos that have been built to support a talk, to learn a concept, or maybe just for fun.
+          <% "talks" -> %>
+            Conference talks about technology and software engineering.
+          <% "books" -> %>
+            Higher barrier to entry helps make for more effective
+            learnings. Read a thousand books in a life-time, with only 10 pages per day.
+            A collection of books to read, have been read, and might re-read.
+          <% "publications" -> %>
+            Software modeling, documentation, and empirical studies peer reviewed list of published conference papers, articles and theses.
         <% end %>
       </p>
     </header>
