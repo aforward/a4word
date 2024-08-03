@@ -5,6 +5,7 @@ defmodule A4word.Generator do
     publish_publications("#{dir}/publications")
     publish_talks("#{dir}/talks")
     publish_books("#{dir}/books")
+    publish_portfolio("#{dir}/portfolio")
     :ok
   end
 
@@ -116,6 +117,11 @@ defmodule A4word.Generator do
         :else -> false
       end
     end)
+  end
+
+  def publish_portfolio(dir) do
+    File.rm_rf("./priv/static/images/portfolio")
+    File.cp_r("#{dir}/images", "./priv/static/images/portfolio")
   end
 
   def talks(dir) do
