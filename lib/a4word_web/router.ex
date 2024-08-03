@@ -24,6 +24,7 @@ defmodule A4wordWeb.Router do
     get "/resume", PageController, :resume
     get "/blog", PageController, :blog
     get "/snippets", PageController, :snippets
+    get "/portfolio", PageController, :portfolio
 
     get "/demos", PageController, :demos
     get "/demo", PageController, :demos

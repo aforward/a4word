@@ -29,6 +29,12 @@ defmodule A4wordWeb.PageController do
     |> render(:publications)
   end
 
+  def portfolio(conn, _params) do
+    conn
+    |> assign(:portfolio, [])
+    |> render(:portfolio)
+  end
+
   def resume(conn, _params) do
     jobs = [
       %{
