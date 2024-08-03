@@ -29,10 +29,18 @@ defmodule A4wordWeb.PageController do
     |> render(:publications)
   end
 
-  def portfolio(conn, _params) do
-    conn
-    |> assign(:portfolio, [])
-    |> render(:portfolio)
+  def portfolio(conn, params) do
+    case params["slug"] do
+      nil ->
+        conn
+        |> assign(:portfolio, Gen.Portfolio.all())
+        |> render(:portfolio)
+
+      slug ->
+        conn
+        |> assign(:project, Gen.Portfolio.project(String.to_existing_atom(slug)))
+        |> render(:portfolio_project)
+    end
   end
 
   def resume(conn, _params) do
