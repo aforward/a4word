@@ -3,6 +3,7 @@ defmodule Gen.Portfolio do
     letscode: %{
       slug: "letscode",
       title: "LetsCode",
+      subtitle: "A shared experience for teaching programming languages to large classes",
       primary_image: "/images/portfolio/letscode/letscode_welcome.png",
       images_grid_size: 1,
       other_images: [
@@ -12,7 +13,7 @@ defmodule Gen.Portfolio do
       tech: ["Elixir", "Phoenix", "Docker"],
       infra: ["Digital Ocean"],
       status: "active",
-      descriptions: [
+      summary: [
         """
         An <i>experimental</i> teaching aide for interacting with students while teaching lectures on programming languages.
         The site is no longer live.
@@ -21,7 +22,7 @@ defmodule Gen.Portfolio do
         This tool gave students a playground to try ideas during the lecture to explore variations of examples presented during class and allowed the presenter to give students to control of the shared text editor so they could live demo their question “Hey, what about this snippet of code”.
         """
       ],
-      extra_details: []
+      details: []
     }
   ]
 
