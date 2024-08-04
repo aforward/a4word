@@ -5,7 +5,7 @@ defmodule A4word.MixProject do
     [
       app: :a4word,
       version: "0.2.0",
-      elixir: "~> 1.16",
+      elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:yecc, :leex] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
