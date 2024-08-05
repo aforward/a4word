@@ -123,7 +123,7 @@ defmodule A4word.Generator do
     File.rm_rf("./priv/static/images/portfolio")
     File.cp_r("#{dir}/images", "./priv/static/images/portfolio")
 
-    portfolio = portfolio(dir) |> IO.inspect()
+    portfolio = portfolio(dir)
 
     gen = """
     defmodule Gen.Portfolio do

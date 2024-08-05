@@ -44,7 +44,7 @@
               </div>
               <div class={"mt-6 lg:pl-20 lg:mt-10 grid grid-cols-1 gap-y-4 gap-x-2"}>
                 <%= for src <- [@project.primary_image | @project.other_images] do %>
-                  <img alt="" class="rounded-2xl" src={src} />
+                  <img alt="" class="rounded" src={src} />
                 <% end %>
               </div>
             </div>
