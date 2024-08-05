@@ -106,9 +106,9 @@ defmodule A4word.Generator do
           |> then(&{&1, step: :skip})
 
         line, {pub, step: section} ->
-          analyze_section(pub, line, section)
+          analyze_section(pub, line, section, :publications)
       end)
-      |> then(fn {pub, step: section} -> clean_section(pub, section) end)
+      |> then(fn {pub, step: section} -> clean_section(pub, section, :publications) end)
     end)
     |> Enum.sort(fn a, b ->
       cond do
@@ -141,8 +141,6 @@ defmodule A4word.Generator do
         |> Enum.map(fn
           {:summary, markdown} -> {:summary, A4word.Markdown.to_html(markdown)}
           {:details, markdown} -> {:details, A4word.Markdown.to_html(markdown)}
-          {:primary_image, image} -> {:primary_image, A4word.Markdown.to_html(image)}
-          {:other_images, list} -> {:other_images, Enum.map(list, &A4word.Markdown.to_html/1)}
           {k, v} -> {k, v}
         end)
         |> Enum.into(%{})
@@ -169,39 +167,38 @@ defmodule A4word.Generator do
         line, {_, step: :title} ->
           {%{title: clean(line)}, step: :subtitle}
 
-        line, {pub, step: :subtitle} ->
-          {Map.put(pub, :subtitle, clean(line)), step: :meta}
+        line, {project, step: :subtitle} ->
+          {Map.put(project, :subtitle, clean(line)), step: :meta}
 
-        line, {pub, step: :meta} ->
+        line, {project, step: :meta} ->
           case analyze_meta(line) do
-            {k, v} -> {Map.put(pub, k, v), step: :meta}
-            :next -> {Map.put(pub, :summary, line), step: :summary}
+            {k, v} -> {Map.put(project, k, v), step: :meta}
+            :next -> {Map.put(project, :summary, line), step: :summary}
           end
 
-        line, {pub, step: :summary} ->
-          append_section_if(pub, line, :summary)
+        line, {project, step: :summary} ->
+          append_section_if(project, line, :summary)
 
-        line, {pub, step: :details} ->
-          append_section_if(pub, line, :details)
+        line, {project, step: :details} ->
+          append_section_if(project, line, :details)
 
-        line, {pub, step: :images} ->
-          append_section_if(pub, line, :images)
+        line, {project, step: :images} ->
+          append_section_if(project, line, :images)
 
-        line, {pub, step: section} ->
+        line, {project, step: section} ->
           IO.inspect("Ignoring #{line}")
-          {pub, step: section}
+          {project, step: section}
       end)
-      |> then(fn {pub, step: _section} ->
-        pub
+      |> then(fn {project, step: _section} ->
+        project
         |> Map.keys()
-        |> Enum.map(fn section -> build_section(pub, section) end)
+        |> Enum.map(fn section -> build_section(project, section, :portfolio) end)
         |> List.flatten()
         |> Enum.into(%{})
       end)
       |> then(&Map.put(&1, :slug, Path.basename(filename, ".md")))
     end)
-
-    # |> Enum.sort_by(& &1.datetime, :desc)
+    |> Enum.sort_by(& &1.date, :desc)
   end
 
   def talks(dir) do
@@ -228,9 +225,9 @@ defmodule A4word.Generator do
           |> then(&{&1, step: :skip})
 
         line, {pub, step: section} ->
-          analyze_section(pub, line, section)
+          analyze_section(pub, line, section, :talks)
       end)
-      |> then(fn {pub, step: section} -> clean_section(pub, section) end)
+      |> then(fn {pub, step: section} -> clean_section(pub, section, :talks) end)
     end)
     |> Enum.sort(fn a, b ->
       cond do
@@ -279,7 +276,7 @@ defmodule A4word.Generator do
           IO.inspect("Ignoring #{line}")
           {pub, step: section}
       end)
-      |> then(fn {pub, step: section} -> clean_section(pub, section) end)
+      |> then(fn {pub, step: section} -> clean_section(pub, section, :books) end)
       |> then(&Map.put(&1, :slug, Path.basename(filename, ".md")))
     end)
     |> Enum.sort_by(& &1.datetime, :desc)
@@ -297,7 +294,7 @@ defmodule A4word.Generator do
     end
   end
 
-  defp analyze_section(pub, line, section) do
+  defp analyze_section(pub, line, section, parent) do
     next_section =
       if String.starts_with?(line, "##") do
         line |> clean() |> String.downcase() |> String.to_atom()
@@ -310,7 +307,7 @@ defmodule A4word.Generator do
         {append_section(pub, line, section), step: section}
 
       next_section ->
-        {pub |> clean_section(section) |> Map.put(next_section, ""), step: next_section}
+        {pub |> clean_section(section, parent) |> Map.put(next_section, ""), step: next_section}
     end
   end
 
@@ -354,7 +351,7 @@ defmodule A4word.Generator do
     end
   end
 
-  defp build_section(pub, section) do
+  defp build_section(pub, section, parent) do
     pub
     |> Map.get(section)
     |> then(fn
@@ -369,6 +366,11 @@ defmodule A4word.Generator do
           {String.to_atom(section), val}
 
         section == :images ->
+          val =
+            val
+            |> Enum.map(&String.replace(&1, "](images/", "](/images/#{parent}/"))
+            |> Enum.map(&extract_img_src/1)
+
           [primary_image | other_images] = val
 
           [
@@ -382,10 +384,10 @@ defmodule A4word.Generator do
     end)
   end
 
-  defp clean_section(pub, :skip), do: pub
+  defp clean_section(pub, :skip, _parent), do: pub
 
-  defp clean_section(pub, section) do
-    {section, val} = build_section(pub, section)
+  defp clean_section(pub, section, parent) do
+    {section, val} = build_section(pub, section, parent)
     Map.put(pub, section, val)
   end
 
@@ -515,6 +517,15 @@ defmodule A4word.Generator do
   #       end
   #   end
   # end
+
+  defp extract_img_src(line) do
+    regex = ~r/!\[.*?\]\((.*?)\)/
+
+    case Regex.run(regex, line) do
+      [_, url] -> url
+      _ -> nil
+    end
+  end
 
   defp clean(line), do: line |> String.trim() |> String.replace(~r{^#*\s*}, "")
 end
