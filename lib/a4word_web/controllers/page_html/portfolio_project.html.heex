@@ -9,11 +9,7 @@
                   <a href={"/portfolio/#{@project.slug}"}><%= @project.title %></a>
                 </h1>
                 <div class="mt-6 space-y-4 text-base text-zinc-600 dark:text-zinc-400">
-                  <%= for p <- @project.summary do %>
-                    <p>
-                      <%= raw(p) %>
-                    </p>
-                  <% end %>
+                  <%= raw(@project.summary) %>
                 </div>
 
                 <div class="mt-2 space-y-4 text-base text-zinc-600 dark:text-zinc-400">
@@ -43,11 +39,7 @@
                 </div>
 
                 <div class="mt-6 space-y-4 text-base text-zinc-600 dark:text-zinc-400">
-                  <%= for p <- @project.details do %>
-                    <p>
-                      <%= raw(p) %>
-                    </p>
-                  <% end %>
+                  <%= raw(@project.details) %>
                 </div>
               </div>
               <div class={"mt-6 lg:pl-20 lg:mt-10 grid grid-cols-1 gap-y-4 gap-x-2"}>

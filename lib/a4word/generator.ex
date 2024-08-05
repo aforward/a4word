@@ -122,6 +122,86 @@ defmodule A4word.Generator do
   def publish_portfolio(dir) do
     File.rm_rf("./priv/static/images/portfolio")
     File.cp_r("#{dir}/images", "./priv/static/images/portfolio")
+
+    portfolio = portfolio(dir) |> IO.inspect()
+
+    gen = """
+    defmodule Gen.Portfolio do
+      def all() do
+        [
+          #{portfolio |> Enum.map(&"#{inspect(&1)},") |> Enum.join("\n")}
+        ]
+        |> Enum.map(&to_html/1)
+      end
+
+      def project(slug), do: Keyword.get(all(), slug)
+
+      defp to_html(talk) do
+        talk
+        |> Enum.map(fn
+          {:summary, markdown} -> {:summary, A4word.Markdown.to_html(markdown)}
+          {:details, markdown} -> {:details, A4word.Markdown.to_html(markdown)}
+          {:primary_image, image} -> {:primary_image, A4word.Markdown.to_html(image)}
+          {:other_images, list} -> {:other_images, Enum.map(list, &A4word.Markdown.to_html/1)}
+          {k, v} -> {k, v}
+        end)
+        |> Enum.into(%{})
+        |> then(fn data -> {String.to_atom(data.slug), data} end)
+      end
+    end
+    """
+
+    File.write("./lib/gen/portfolio.ex", gen)
+  end
+
+  def portfolio(dir) do
+    filenames =
+      dir
+      |> File.ls!()
+      |> Enum.filter(&String.ends_with?(&1, ".md"))
+      |> Enum.map(&"#{dir}/#{&1}")
+
+    filenames
+    |> Enum.map(fn filename ->
+      filename
+      |> File.stream!()
+      |> Enum.reduce({nil, step: :title}, fn
+        line, {_, step: :title} ->
+          {%{title: clean(line)}, step: :subtitle}
+
+        line, {pub, step: :subtitle} ->
+          {Map.put(pub, :subtitle, clean(line)), step: :meta}
+
+        line, {pub, step: :meta} ->
+          case analyze_meta(line) do
+            {k, v} -> {Map.put(pub, k, v), step: :meta}
+            :next -> {Map.put(pub, :summary, line), step: :summary}
+          end
+
+        line, {pub, step: :summary} ->
+          append_section_if(pub, line, :summary)
+
+        line, {pub, step: :details} ->
+          append_section_if(pub, line, :details)
+
+        line, {pub, step: :images} ->
+          append_section_if(pub, line, :images)
+
+        line, {pub, step: section} ->
+          IO.inspect("Ignoring #{line}")
+          {pub, step: section}
+      end)
+      |> then(fn {pub, step: _section} ->
+        pub
+        |> Map.keys()
+        |> Enum.map(fn section -> build_section(pub, section) end)
+        |> List.flatten()
+        |> Enum.into(%{})
+      end)
+      |> then(&Map.put(&1, :slug, Path.basename(filename, ".md")))
+    end)
+
+    # |> Enum.sort_by(& &1.datetime, :desc)
   end
 
   def talks(dir) do
@@ -234,22 +314,79 @@ defmodule A4word.Generator do
     end
   end
 
+  defp append_section_if(pub, line, section) do
+    if String.starts_with?(line, "## ") do
+      next_step =
+        String.trim_leading(line, "##")
+        |> String.trim()
+        |> String.downcase()
+        |> String.to_atom()
+
+      {pub, step: next_step}
+    else
+      {append_section(pub, line, section), step: section}
+    end
+  end
+
   defp append_section(pub, _line, :skip), do: pub
+
+  defp append_section(pub, line, :images) do
+    append_images(pub, line, :images)
+  end
 
   defp append_section(pub, line, section) do
     pub
     |> Map.get(section)
-    |> then(&(&1 <> line))
+    |> then(fn
+      nil -> line
+      existing -> existing <> line
+    end)
     |> then(&Map.put(pub, section, &1))
+  end
+
+  defp append_images(pub, line, section) do
+    if String.starts_with?(line, "![") do
+      existing_images = Map.get(pub, section) || []
+      images = existing_images ++ [clean(line)]
+      Map.put(pub, section, images)
+    else
+      pub
+    end
+  end
+
+  defp build_section(pub, section) do
+    pub
+    |> Map.get(section)
+    |> then(fn
+      val when is_binary(val) -> String.trim(val)
+      list when is_list(list) -> Enum.map(list, &String.trim/1)
+    end)
+    |> then(fn val ->
+      cond do
+        String.ends_with?("#{section}", "[]") ->
+          section = String.trim_trailing("#{section}", "[]")
+          val = String.split(val, ",") |> Enum.map(&String.trim/1)
+          {String.to_atom(section), val}
+
+        section == :images ->
+          [primary_image | other_images] = val
+
+          [
+            primary_image: primary_image,
+            other_images: other_images
+          ]
+
+        :else ->
+          {section, val}
+      end
+    end)
   end
 
   defp clean_section(pub, :skip), do: pub
 
   defp clean_section(pub, section) do
-    pub
-    |> Map.get(section)
-    |> then(&String.trim(&1))
-    |> then(&Map.put(pub, section, &1))
+    {section, val} = build_section(pub, section)
+    Map.put(pub, section, val)
   end
 
   defp filename(slug, dir), do: "#{dir}/#{slug}.md"

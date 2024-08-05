@@ -15,11 +15,7 @@
                 </h1>
 
                 <div id={"project-#{project.slug}"} class="mt-6 space-y-4 text-base text-zinc-600 dark:text-zinc-400">
-                  <%= for p <- project.summary do %>
-                    <p>
-                      <%= raw(p) %>
-                    </p>
-                  <% end %>
+                  <%= raw(project.summary) %>
                 </div>
 
                 <div class="mt-2 space-y-4 text-base text-zinc-600 dark:text-zinc-400">
