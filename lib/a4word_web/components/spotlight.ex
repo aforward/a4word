@@ -145,6 +145,13 @@ defmodule A4wordWeb.Spotlight do
             A collection of books to read, have been read, and might re-read.
           <% "publications" -> %>
             Software modeling, documentation, and empirical studies peer reviewed list of published conference papers, articles and theses.
+            <a
+              class="underline text-sky-600"
+              target="__blank"
+              href="https://scholar.google.com.my/citations?user=0PWZ8YMAAAAJ"
+            >
+              Google Scholar
+            </a>
         <% end %>
       </p>
     </header>

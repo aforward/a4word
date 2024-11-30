@@ -2,6 +2,57 @@ defmodule Gen.Books do
   def all() do
     [
       %{
+        title: "The Infinite Game",
+        author: "Simon Sinek",
+        summary:
+          "The infinite mindset, focusing on long-term purpose and adaptability\nover short-term wins.",
+        slug: "the-infinite-game",
+        published: "2019-10-115",
+        datetime: "2024-11-30",
+        img: "![The Infinite Game](covers/the-infinite-game.jpg)"
+      },
+      %{
+        title: "Be Funny or Die",
+        author: "Joel Morris",
+        summary:
+          "How Comedy Works and Why It Matters](covers/be-funny-or-die.jpg)\n\nFraming comedy as Construct, Confirm, and Confound.",
+        slug: "be-funny-or-die",
+        published: "2024-11-26",
+        datetime: "2024-11-26",
+        img: "![Be Funny or Die"
+      },
+      %{
+        title: "Meditations for Mortals",
+        author: "Oliver Burkeman",
+        summary:
+          "Embrace mortality.  Draw insights from Marcus Aurelius and learn to\nlet go of trivial concerns.",
+        slug: "meditations-for-mortals",
+        published: "2024-10-15",
+        datetime: "2024-10-15",
+        img:
+          "![Meditations for Mortals: Four Weeks to Embrace Your Limitations and Make Time for What Counts](covers/meditations-for-mortals.jpg)"
+      },
+      %{
+        title: "The Signal and the Noise",
+        author: "Nate Silver",
+        summary: "The art and science of marking (more) accurate predictions.",
+        slug: "the-signal-and-the-noise",
+        published: "2024-09-29",
+        datetime: "2024-09-29",
+        img:
+          "![The Signal and the Noise: Why So Many Predictions Fail-but Some Don't](covers/the-signal-and-the-noise.jpg)"
+      },
+      %{
+        title: "Nudge: The Final Edition",
+        author: "Richard H. Thaler & Cass R. Sunstein",
+        summary:
+          "Improving Decisions About Money, Health, And The Environment](covers/nudge-the-final-edition.jpg)\n\nLearn about choice architecture where subtle nudges—like default options, reminders, or framing—can help individuals make better decisions about their finances, health, and the environment without limiting freedom of choice.",
+        slug: "nudge-the-final-edition",
+        published: "2024-09-14",
+        datetime: "2024-09-14",
+        img: "![Nudge: The Final Edition"
+      },
+      %{
         title: "The Alchemist",
         author: "Paulo Coelho",
         summary:
